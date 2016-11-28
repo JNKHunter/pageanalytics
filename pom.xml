@@ -8,6 +8,21 @@
     <artifactId>pageanalytics</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>clojars</id>
+            <url>https://repository.cloudera.com/content/repositories/releases</url>
+        </repository>
+        <repository>
+            <id>conjars</id>
+            <url>http://conjars.org/repo</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>swank-clojure</groupId>

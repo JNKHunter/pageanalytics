@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -14,14 +14,26 @@
     <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: cascalog:cascalog:1.10.0" level="project" />
+    <orderEntry type="library" name="Maven: org.clojure:tools.macro:0.1.1" level="project" />
+    <orderEntry type="library" name="Maven: cascading:cascading-hadoop:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: cascading:cascading-core:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: riffle:riffle:0.1-dev" level="project" />
+    <orderEntry type="library" name="Maven: thirdparty:jgrapht-jdk1.6:0.8.1" level="project" />
+    <orderEntry type="library" name="Maven: cascading.kryo:cascading.kryo:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: cascalog:carbonite:1.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:meat-locker:0.3.0" level="project" />
+    <orderEntry type="library" name="Maven: hadoop-util:hadoop-util:0.2.8" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:maple:0.2.0" level="project" />
+    <orderEntry type="library" name="Maven: jackknife:jackknife:0.1.2" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.16" level="project" />
     <orderEntry type="library" name="Maven: backtype:dfs-datastores-cascading:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: backtype:dfs-datastores:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: jvyaml:jvyaml:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.storm:storm-core:0.9.4" level="project" />
     <orderEntry type="library" name="Maven: clj-time:clj-time:0.4.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.0" level="project" />
     <orderEntry type="library" name="Maven: compojure:compojure:1.1.3" level="project" />
     <orderEntry type="library" name="Maven: org.clojure:core.incubator:0.1.0" level="project" />
-    <orderEntry type="library" name="Maven: org.clojure:tools.macro:0.1.0" level="project" />
     <orderEntry type="library" name="Maven: clout:clout:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: ring:ring-core:1.1.5" level="project" />
     <orderEntry type="library" name="Maven: commons-fileupload:commons-fileupload:1.2.1" level="project" />
@@ -66,7 +78,12 @@
     <orderEntry type="library" name="Maven: com.101tec:zkclient:0.3" level="project" />
     <orderEntry type="library" name="Maven: backtype:cascading-thrift:0.2.3" level="project" />
     <orderEntry type="library" name="Maven: elephantdb:elephantdb-cascalog:0.4.5" level="project" />
+    <orderEntry type="library" name="Maven: elephantdb:elephantdb-cascading:0.4.5" level="project" />
     <orderEntry type="library" name="Maven: elephantdb:elephantdb-bdb:0.4.5" level="project" />
+    <orderEntry type="library" name="Maven: elephantdb:elephantdb-core:0.4.5" level="project" />
+    <orderEntry type="library" name="Maven: metrics-clojure:metrics-clojure:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: elephantdb:elephantdb-thrift:0.4.5" level="project" />
+    <orderEntry type="library" name="Maven: com.sleepycat:je:5.0.58" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.clearspring.analytics:stream:2.7.0" level="project" />
     <orderEntry type="library" name="Maven: it.unimi.dsi:fastutil:6.5.7" level="project" />
@@ -81,8 +98,22 @@
     <orderEntry type="library" name="Maven: com.github.stephenc.eaio-uuid:uuid:3.2.0" level="project" />
     <orderEntry type="library" name="Maven: com.ecyrd.speed4j:speed4j:0.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-core:0.20.2-dev" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.4.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: commons-httpclient:commons-httpclient:3.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-net:commons-net:1.4.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: oro:oro:2.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.mortbay.jetty:jsp-2.1:6.1.14" level="project" />
+    <orderEntry type="library" name="Maven: ant:ant:1.6.5" level="project" />
+    <orderEntry type="library" name="Maven: org.mortbay.jetty:jsp-api-2.1:6.1.14" level="project" />
+    <orderEntry type="library" name="Maven: org.mortbay.jetty:servlet-api-2.5:6.1.14" level="project" />
+    <orderEntry type="library" name="Maven: commons-el:commons-el:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jdt:core:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ant:ant:1.7.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.ant:ant-launcher:1.7.0" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jets3t:jets3t:0.6.1" level="project" />
+    <orderEntry type="library" name="Maven: xmlenc:xmlenc:0.52" level="project" />
     <orderEntry type="library" name="Maven: org.apache.zookeeper:zookeeper:3.4.6" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty:3.7.0.Final" level="project" />
   </component>
 </module>
