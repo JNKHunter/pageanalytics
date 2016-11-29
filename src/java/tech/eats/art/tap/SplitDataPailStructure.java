@@ -1,24 +1,105 @@
 package tech.eats.art.tap;
 
+import org.apache.thrift.TFieldIdEnum;
+import org.apache.thrift.meta_data.FieldMetaData;
 import org.apache.thrift.meta_data.FieldValueMetaData;
 import org.apache.thrift.meta_data.StructMetaData;
 import tech.eats.art.schema.Data;
 import tech.eats.art.schema.DataUnit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by jhunter on 11/28/16.
  */
 public class SplitDataPailStructure extends DataPailStructure {
-    public static HashMap<Short, FieldStructure> validFieldMap = new HashMap<>();
 
     protected static interface FieldStructure{
         public boolean isValidTarget(String[] dirs);
         public void fillTarget(List<String> ret, Object val);
     }
+
+    public static HashMap<Short, FieldStructure> validFieldMap = new HashMap<>();
+
+    private static Map<TFieldIdEnum, FieldMetaData>
+    getMetadataMap(Class c)
+    {
+        try {
+            Object o = c.newInstance();
+            return (Map) c.getField("metaDataMap").get(o);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    protected static class EdgeStructure implements FieldStructure {
+        @Override
+        public boolean isValidTarget(String[] dirs) {
+            return true;
+        }
+
+        @Override
+        public void fillTarget(List<String> ret, Object val) {
+
+        }
+    }
+
+    protected static class PropertyStructure implements FieldStructure {
+        private TFieldIdEnum valueId;
+        private HashSet<Short> validIds;
+
+        private static TFieldIdEnum getIdForClass(
+                Map<TFieldIdEnum, FieldMetaData> meta,
+                Class toFind)
+        {
+            for(TFieldIdEnum k: meta.keySet()) {
+                FieldValueMetaData md = meta.get(k).valueMetaData;
+                if(md instanceof StructMetaData) {
+                    if(toFind.equals(((StructMetaData) md).structClass)) {
+                        return k;
+                    }
+                }
+            }
+            throw new RuntimeException("Could not find " + toFind.toString() +
+                    " in " + meta.toString());
+        }
+
+        public PropertyStructure(Class prop) {
+            try {
+                Map<TFieldIdEnum, FieldMetaData> propMeta = getMetadataMap(prop);
+                Class valClass = Class.forName(prop.getName() + "Value");
+                valueId = getIdForClass(propMeta, valClass);
+
+                validIds = new HashSet<Short>();
+                Map<TFieldIdEnum, FieldMetaData> valMeta = getMetadataMap(valClass);
+                for(TFieldIdEnum valId: valMeta.keySet()) {
+                    validIds.add(valId.getThriftFieldId());
+                }
+            } catch(Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public boolean isValidTarget(String[] dirs) {
+            if(dirs.length<2) return false;
+            try {
+                short s = Short.parseShort(dirs[1]);
+                return validIds.contains(s);
+            } catch(NumberFormatException e) {
+                return false;
+            }
+        }
+
+        public void fillTarget(List<String> ret, Object val) {
+            ret.add("" + ((TUnion) ((TBase)val)
+                    .getFieldValue(valueId))
+                    .getSetField()
+                    .getThriftFieldId());
+        }
+    }
+
+
 
     static {
         for(DataUnit._Fields k: DataUnit.metaDataMap.keySet()){
