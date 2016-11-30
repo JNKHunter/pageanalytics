@@ -1,6 +1,8 @@
 package tech.eats.art.tap;
 
+import org.apache.thrift.TBase;
 import org.apache.thrift.TFieldIdEnum;
+import org.apache.thrift.TUnion;
 import org.apache.thrift.meta_data.FieldMetaData;
 import org.apache.thrift.meta_data.FieldValueMetaData;
 import org.apache.thrift.meta_data.StructMetaData;
