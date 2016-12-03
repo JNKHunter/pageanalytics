@@ -100,8 +100,7 @@ public class SplitDataPailStructure extends DataPailStructure {
                     .getThriftFieldId());
         }
     }
-
-
+    }
 
     static {
         for(DataUnit._Fields k: DataUnit.metaDataMap.keySet()){
