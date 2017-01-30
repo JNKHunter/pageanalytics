@@ -89,6 +89,11 @@ public class BatchWorkflow {
         return new PailTap(path, opts);
     }
 
+    public static void normalizeURLs(){
+        Tap masterDataset = new PailTap("/data/master");
+        Tap outTap = splitDataTap("/tmp/swa/normalized_urls");
+    }
+
     private static void appendNewDataToMasterPail(Pail masterPail, Pail snapshotPail) throws IOException {
         Pail shreddedPail = shred();
         masterPail.absorb(shreddedPail);
