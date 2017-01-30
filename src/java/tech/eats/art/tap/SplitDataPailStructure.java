@@ -23,6 +23,22 @@ public class SplitDataPailStructure extends DataPailStructure {
 
     public static HashMap<Short, FieldStructure> validFieldMap = new HashMap<>();
 
+    static {
+        for(DataUnit._Fields k: DataUnit.metaDataMap.keySet()){
+            FieldValueMetaData md = DataUnit.metaDataMap.get(k).valueMetaData;
+            FieldStructure fieldStruct;
+            if(md instanceof StructMetaData && ((StructMetaData) md).structClass.getName().endsWith("Property")){
+                fieldStruct = new PropertyStructure((StructMetaData) md).structClass);
+            }else{
+                fieldStruct = new EdgeStructure();
+            }
+
+            validFieldMap.put(k.getThriftFieldId(), fieldStruct);
+
+        }
+    }
+
+
     private static Map<TFieldIdEnum, FieldMetaData>
     getMetadataMap(Class c)
     {
@@ -31,6 +47,34 @@ public class SplitDataPailStructure extends DataPailStructure {
             return (Map) c.getField("metaDataMap").get(o);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<String> getTarget(Data object) {
+        List<String> ret = new ArrayList<>();
+        DataUnit du = object.get_dataunit();
+        short id = du.getSetField().getThriftFieldId();
+        ret.add("" + id);
+        validFieldMap.get(id).fillTarget(ret, du.getFieldValue());
+        return ret;
+    }
+
+    @Override
+    public boolean isValidTarget(String[] dirs) {
+        if(dirs.length == 0){
+            return false;
+        }
+
+        try{
+            short id = Short.parseShort(dirs[0]);
+            FieldStructure s = validFieldMap.get(id);
+            if(s == null)
+                return false;
+            else
+                return s.isValidTarget(dirs);
+        } catch(NumberFormatException e){
+            return false;
         }
     }
 
@@ -98,50 +142,6 @@ public class SplitDataPailStructure extends DataPailStructure {
                     .getFieldValue(valueId))
                     .getSetField()
                     .getThriftFieldId());
-        }
-    }
-    }
-
-    static {
-        for(DataUnit._Fields k: DataUnit.metaDataMap.keySet()){
-            FieldValueMetaData md = DataUnit.metaDataMap.get(k).valueMetaData;
-            FieldStructure fieldStruct;
-            if(md instanceof StructMetaData && ((StructMetaData) md).structClass.getName().endsWith("Property")){
-                    fieldStruct = new PropertyStructure((StructMetaData) md).structClass);
-            }else{
-                fieldStruct = new EdgeStructure();
-            }
-
-            validFieldMap.put(k.getThriftFieldId(), fieldStruct);
-
-        }
-    }
-
-    @Override
-    public List<String> getTarget(Data object) {
-        List<String> ret = new ArrayList<>();
-        DataUnit du = object.get_dataunit();
-        short id = du.getSetField().getThriftFieldId();
-        ret.add("" + id);
-        validFieldMap.get(id).fillTarget(ret, du.getFieldValue());
-        return ret;
-    }
-
-    @Override
-    public boolean isValidTarget(String[] dirs) {
-        if(dirs.length == 0){
-            return false;
-        }
-
-        try{
-            short id = Short.parseShort(dirs[0]);
-            FieldStructure s = validFieldMap.get(id);
-            if(s == null)
-                return false;
-            else
-                return s.isValidTarget(dirs);
-        } catch(NumberFormatException e){
-            return false;
         }
     }
 }
