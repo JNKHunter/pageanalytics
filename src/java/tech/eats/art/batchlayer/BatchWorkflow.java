@@ -2,16 +2,27 @@ package tech.eats.art.batchlayer;
 
 import backtype.cascading.tap.PailTap;
 import backtype.hadoop.pail.Pail;
+import backtype.hadoop.pail.PailSpec;
+import backtype.hadoop.pail.PailStructure;
+import cascading.flow.FlowProcess;
+import cascading.operation.FunctionCall;
 import cascading.tap.Tap;
+import cascading.tuple.Tuple;
+import cascalog.CascalogFunction;
 import cascalog.ops.RandLong;
 import jcascalog.Api;
 import jcascalog.Subquery;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import tech.eats.art.schema.Data;
 import tech.eats.art.schema.DataUnit;
+import tech.eats.art.schema.PageID;
+import tech.eats.art.tap.SplitDataPailStructure;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,10 +82,44 @@ public class BatchWorkflow {
         return shreddedPail;
     }
 
-    private static PailTap splitDataTap(String s) {
+    public static PailTap splitDataTap(String path) {
+        PailTap.PailTapOptions opts = new PailTap.PailTapOptions();
+        opts.spec = new PailSpec(
+                (PailStructure) new SplitDataPailStructure());
+        return new PailTap(path, opts);
     }
 
-    private static void appendNewDataToMasterPail(Pail masterPail, Pail snapshotPail) {
+    private static void appendNewDataToMasterPail(Pail masterPail, Pail snapshotPail) throws IOException {
+        Pail shreddedPail = shred();
+        masterPail.absorb(shreddedPail);
+    }
+
+    public static class NormalizeURL extends CascalogFunction {
+        public void operate(FlowProcess process, FunctionCall call) {
+            Data data = ((Data) call.getArguments()
+                    .getObject(0)).deepCopy();
+            DataUnit du = data.get_dataunit();
+
+            if(du.getSetField() == DataUnit._Fields.PAGE_VIEW) {
+                normalize(du.get_page_view().get_page());
+            } else if(du.getSetField() ==
+                    DataUnit._Fields.PAGE_PROPERTY) {
+                normalize(du.get_page_property().get_id());
+            }
+            call.getOutputCollector().add(new Tuple(data));
+        }
+
+        private void normalize(PageID page) {
+            if(page.getSetField() == PageID._Fields.URL) {
+                String urlStr = page.get_url();
+                try {
+                    URL url = new URL(urlStr);
+                    page.set_url(url.getProtocol() + "://" +
+                            url.getHost() + url.getPath());
+                } catch(MalformedURLException e) {
+                }
+            }
+        }
 
     }
 
