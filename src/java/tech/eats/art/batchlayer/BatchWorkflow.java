@@ -275,6 +275,23 @@ public class BatchWorkflow {
         }
     }
 
+    public static class ConstructHyperLogLog extends CascalogBuffer {
+        public void operate(FlowProcess process, BufferCall call) {
+            HyperLogLog hll = new HyperLogLog(14);
+            Iterator<TupleEntry> it = call.getArgumentsIterator();
+            while(it.hasNext()) {
+                TupleEntry tuple = it.next();
+                hll.offer(tuple.getObject(0));
+            }
+            try {
+                call.getOutputCollector().add(
+                        new Tuple(hll.getBytes()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public static class Debug extends CascalogFunction {
         public void operate(FlowProcess process, FunctionCall call) {
             System.out.println("DEBUG: " + call.getArguments().toString());
