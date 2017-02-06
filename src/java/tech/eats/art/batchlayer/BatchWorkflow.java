@@ -292,6 +292,32 @@ public class BatchWorkflow {
         }
     }
 
+    public static class MergeHyperLogLog extends CascalogBuffer {
+        public void operate(FlowProcess process, BufferCall call) {
+            Iterator<TupleEntry> it = call.getArgumentsIterator();
+            HyperLogLog curr = null;
+            try {
+                while(it.hasNext()) {
+                    TupleEntry tuple = it.next();
+                    byte[] serialized = (byte[]) tuple.getObject(0);
+                    HyperLogLog hll = HyperLogLog.Builder.build(
+                            serialized);
+                    if(curr==null) {
+                        curr = hll;
+                    } else {
+                        curr = (HyperLogLog) curr.merge(hll);
+                    }
+                }
+                call.getOutputCollector().add(
+                        new Tuple(curr.getBytes()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch(CardinalityMergeException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public static class Debug extends CascalogFunction {
         public void operate(FlowProcess process, FunctionCall call) {
             System.out.println("DEBUG: " + call.getArguments().toString());
